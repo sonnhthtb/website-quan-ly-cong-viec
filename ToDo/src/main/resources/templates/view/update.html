@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="vn">
+<head th:replace="/view/fragments :: html_head"/>
+<body>
+<div class="wrapper">
+    <header>Todo App</header>
+    <form id="formSubmit">
+        <div class="inputField">
+            <input id="input" type="text" placeholder="Add your new todo" th:field="${model.content}" name="content"/>
+            <button id="btnUpdate" type="button"><i class="fas fa-sync"></i></button>
+        </div>
+        <input type="hidden" th:value="${model.id}" id="id" name="id"/>
+    </form>
+    <div class="footer">
+        <button>Back</button>
+    </div>
+</div>
+<script>
+    const inputBox = document.querySelector(".inputField input");
+    const updateBtn = document.querySelector(".inputField button");
+    const todoList = document.querySelector(".todoList");
+    const backBtn = document.querySelector(".footer button");
+    $(document).ready(function () {
+        backBtn.classList.add("active"); //active the delete button
+    });
+
+
+    inputBox.onkeyup = ()=>{
+        let userEnteredValue =  inputBox.value; //getting user entered value
+        if(userEnteredValue.trim() != 0){ //if the user value isn't only spaces
+            updateBtn.classList.add("active"); //active the add button
+        }else{
+            updateBtn.classList.remove("active"); //unactive the add button
+        }
+    }
+
+    $('#btnUpdate').click(function (e) {
+        e.preventDefault();
+        var data = {};
+        var formData = $('#formSubmit').serializeArray();
+        // data["content"] = editor.getData();
+        $.each(formData, function (i, val) {
+            data[""+val.name+""] = val.value
+        });
+        update(data);
+    });
+
+    function update(data){
+        var id = $('#id').val();
+        $.ajax({
+            url: '/todo/' + id,
+            method: 'Put',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            dataType : 'json',
+            success: function (result) {
+                window.location.href = "/all?message=update_success";
+            },
+            error: function (error){
+                window.location.href = "/all?message=error_system"
+            }
+        });
+    }
+    backBtn.onclick = ()=>{
+        window.location.href = "/all"
+    }
+</script>
+
+</body>
+</html>

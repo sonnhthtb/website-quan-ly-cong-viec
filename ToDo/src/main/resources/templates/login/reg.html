@@ -1,0 +1,60 @@
+<!DOCTYPE>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/login/fragments :: html_head"/>
+<body>
+<div class="container">
+    <h1 class="form-heading">Đăng kí</h1>
+    <div class="login-form">
+        <div class="main-div">
+            <div th:if="${message} != null ">
+                <div th:class="${'alert alert-' + alert} + ' fade in'">
+                    <a href="/all" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong th:text="${message}"></strong>
+                </div>
+            </div>
+            <form id = "formSubmit" th:action="@{/reg}" class="form-signup" method="post">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Tên đăng nhập">
+                </div>
+
+                <div class="form-group">
+                    <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Họ và tên">
+                </div>
+
+                <div class="form-group">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Mật khẩu">
+                </div>
+
+                <button id = "btnReg" type="submit" class="btn btn-primary" >Đăng kí</button>
+                <div>Bạn đã có tài khoản?</div>
+                <a type="button" class="btn btn-link" th:href="@{/login}">Đăng nhập</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#btnReg').click(function (e) {
+        e.preventDefault();
+        var data = {};
+        var formData = $('#formSubmit').serializeArray();
+        $.each(formData, function (i, val) {
+            data[""+val.name+""] = val.value
+        });
+        $.ajax({
+            url: '/reg',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            dataType : 'json',
+            success: function (result) {
+                window.location.href = "/login?message=reg_success";
+            },
+            error: function (error){
+                window.location.href = "/reg?message=reg_error"
+            }
+        });
+    });
+</script>
+</body>
+</html>

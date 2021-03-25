@@ -1,0 +1,31 @@
+<!DOCTYPE>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/login/fragments :: html_head"/>
+<body>
+    <div class="container">
+        <h1 class="form-heading">Đăng Nhập</h1>
+        <div class="login-form">
+            <div class="main-div">
+                <div th:if="${message} != null ">
+                    <div th:class="${'alert alert-' + alert} + ' fade in'">
+                        <a href="/all" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong th:text="${message}"></strong>
+                    </div>
+                </div>
+                <form th:action="@{/login}" class="form-signin" method="post">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Tên đăng nhập">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Mật khẩu">
+                    </div>
+                    <button type="submit" class="btn btn-primary" >Đăng nhập</button>
+                    <div>Bạn chưa có tài khoản?</div>
+                    <a type="button" class="btn btn-link" th:href="@{/reg}">Đăng kí</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
